@@ -54,6 +54,11 @@ module.exports = yeoman.generators.Base.extend({
 				this.templatePath('_bower.json'),
 				this.destinationPath('bower.json')
 			);
+			// Copy the gitignore file
+			this.fs.copy(
+				this.templatePath('gitignore'),
+				this.destinationPath('.gitignore')
+			);
 			// Copy the webpack config file
 			this.fs.copy(
 				this.templatePath('_webpack.config.js'),
@@ -61,7 +66,7 @@ module.exports = yeoman.generators.Base.extend({
 			);
 			// Copy the source folder
 			this.fs.copy(
-				this.templatePath('src/**/*!index.html'),
+				this.templatePath('src/**/*'),
 				this.destinationPath('src')
 			);
 			// Copy index file and fill in our values
