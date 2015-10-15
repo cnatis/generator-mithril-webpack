@@ -2,6 +2,8 @@ require('./index.html?output=index.html');
 
 import m from 'mithril';
 
-m.route(document.body, '/', {
+let routes = {
 	/*===== yeoman hook =====*/
-});
+};
+
+m.route(document.body, '/', routes);
