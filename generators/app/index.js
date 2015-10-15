@@ -61,9 +61,16 @@ module.exports = yeoman.generators.Base.extend({
 			);
 			// Copy the source folder
 			this.fs.copy(
-				this.templatePath('src/**/*'),
+				this.templatePath('src/**/*!index.html'),
 				this.destinationPath('src')
 			);
+			// Copy index file and fill in our values
+			this.fs.copyTpl(
+				this.templatePath('src/index.html'),
+				this.destinationPath('src/index.html'),
+				{ appname: this.appname || 'Untitled' }
+			);
+			// Copy the gitkeep files
 			this.fs.copy(
 				this.templatePath('src/**/.gitkeep'),
 				this.destinationPath('src')
