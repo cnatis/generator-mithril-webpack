@@ -3,8 +3,6 @@ var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
 var _ = require('lodash');
-var esprima = require('esprima');
-var escodegen = require('escodegen');
 
 module.exports = yeoman.generators.Base.extend({
 	constructor: function() {
@@ -12,10 +10,17 @@ module.exports = yeoman.generators.Base.extend({
 
 		// Arguments
 		this.argument('newRoute', {
-			desc: 'New Mithril route',
+			desc: 'New route path ie. "/profile/new"',
 			type: String, 
 			optional: false,
 			required: true
+		});
+
+		// Options
+		this.option('default', {
+			desc: 'Set this route as the "default" route at url "/"',
+			alias: 'd',
+			type: Boolean
 		});
 	},
 	prompting: function() {
@@ -42,7 +47,8 @@ module.exports = yeoman.generators.Base.extend({
 			// Hook is the comment we use to find out insert point
 			var hook = '/*===== yeoman hook =====*/';
 			// Remove preceding and trailing slashes
-			this.newRoute = this.newRoute.replace(/^\/|\/$/g, '')
+			this.newRoute = this.newRoute.replace(/^\/|\/$/g, '');
+			var finalRoute = '/' + (this.options.default ? '' : this.newRoute);
 			// Split the route path so we can camel case it for use in the file system
 			var routeArray = this.newRoute.split('/');
 			var ccRoutePath = routeArray.reduce(function(result, current, idx) {
@@ -62,7 +68,7 @@ module.exports = yeoman.generators.Base.extend({
 			// Get out insert code ready to be inserted into the project
 			var source = this.fs.read(this.destinationPath('src/index.js'));
 			var insert = this.fs.read(this.templatePath('routeInsert.js'));
-			insert = insert.replace(/###newRouteURL###/g, '/' + this.newRoute).replace(/###newRoutePath###/g, './views/' + ccRoutePath);
+			insert = insert.replace(/###newRouteURL###/g, finalRoute).replace(/###newRoutePath###/g, './views/' + ccRoutePath);
 
 			// Write out the new contents to the file system
 			if(source.indexOf(insert) < 0)
