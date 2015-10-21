@@ -25,10 +25,10 @@ describe('mithril-webpack:app', function() {
 			'src',
 			'src/index.html',
 			'src/index.js',
-			'src/components/.gitkeep',
-			'src/images/.gitkeep',
-			'src/models/.gitkeep',
-			'src/views/.gitkeep',
+			'src/components/README.md',
+			'src/images/README.md',
+			'src/models/README.md',
+			'src/modules/README.md',
 		]);
 	});
 });
@@ -85,13 +85,13 @@ describe('mithril-webpack:route', function() {
 			.on('end', done);
 	});
 
-	it('creates the view structure', function() {
+	it('creates the module structure', function() {
 		assert.file([
-			'src/views/testRoute/controller.js',
-			'src/views/testRoute/index.js',
-			'src/views/testRoute/view.js',
-			'src/views/testRoute/viewModel.js',
-			'src/views/testRoute/styles.scss'
+			'src/modules/testRoute/controller.js',
+			'src/modules/testRoute/index.js',
+			'src/modules/testRoute/view.js',
+			'src/modules/testRoute/viewModel.js',
+			'src/modules/testRoute/styles.scss'
 		]);
 	});
 });

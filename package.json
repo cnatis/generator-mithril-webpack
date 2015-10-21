@@ -1,6 +1,6 @@
 {
   "name": "generator-mithril-webpack",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Yeoman generator for Mithril.js applications utililizing ES6 and WebPack",
   "license": "MIT",
   "main": "app/index.js",
@@ -27,10 +27,10 @@
     "chalk": "^1.0.0",
     "lodash": "^3.10.1",
     "yeoman-generator": "^0.19.0",
-    "yosay": "^1.0.2"
+    "yosay": "^1.0.2",
+    "fs-extra": "^0.24.0"
   },
   "devDependencies": {
-    "fs-extra": "^0.24.0",
     "mocha": "*"
   }
 }

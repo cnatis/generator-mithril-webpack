@@ -61,14 +61,14 @@ module.exports = yeoman.generators.Base.extend({
 
 			// Copy the view template to the project
 			this.fs.copy(
-				this.templatePath('view/**/*'),
-				this.destinationPath('src/views/' + ccRoutePath)
+				this.templatePath('module/**/*'),
+				this.destinationPath('src/modules/' + ccRoutePath)
 			);
 
 			// Get out insert code ready to be inserted into the project
 			var source = this.fs.read(this.destinationPath('src/index.js'));
 			var insert = this.fs.read(this.templatePath('routeInsert.js'));
-			insert = insert.replace(/###newRouteURL###/g, finalRoute).replace(/###newRoutePath###/g, './views/' + ccRoutePath);
+			insert = insert.replace(/###newRouteURL###/g, finalRoute).replace(/###newRoutePath###/g, './modules/' + ccRoutePath);
 
 			// Write out the new contents to the file system
 			if(source.indexOf(insert) < 0)
