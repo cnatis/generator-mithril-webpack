@@ -1,6 +1,4 @@
-# generator-mithril-webpack [![Build Status](https://secure.travis-ci.org/cnatis/generator-mithril-webpack.png?branch=master)](https://travis-ci.org/cnatis/generator-mithril-webpack)
-
-[![Join the chat at https://gitter.im/cnatis/generator-mithril-webpack](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cnatis/generator-mithril-webpack?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# generator-mithril-webpack [![Build Status](https://secure.travis-ci.org/cnatis/generator-mithril-webpack.png?branch=master)](https://travis-ci.org/cnatis/generator-mithril-webpack) [![Join the chat at https://gitter.im/cnatis/generator-mithril-webpack](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cnatis/generator-mithril-webpack?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 > [Yeoman](http://yeoman.io) generator
 
