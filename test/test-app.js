@@ -41,6 +41,10 @@ describe('mithril-webpack:component', function() {
 				skipInstall: true
 			})
 			.withArguments(['testComponent'])
+			.inTmpDir(function(dir) {
+				var done = this.async();
+				fs.outputFile(path.join(dir, 'src/style/index.scss'), '', done);
+			})
 			.on('end', done);
 	});
 
@@ -50,7 +54,7 @@ describe('mithril-webpack:component', function() {
 			'src/components/testComponent/index.js',
 			'src/components/testComponent/view.js',
 			'src/components/testComponent/viewModel.js',
-			'src/components/testComponent/styles.scss'
+			'src/components/testComponent/style.scss'
 		]);
 	});
 });
@@ -81,7 +85,9 @@ describe('mithril-webpack:route', function() {
 			.withArguments(['/testRoute'])
 			.inTmpDir(function (dir) {
 				var done = this.async();
-				fs.outputFile(path.join(dir, 'src/index.js'), '', done);
+				fs.outputFile(path.join(dir, 'src/index.js'), '', function() {
+					fs.outputFile(path.join(dir, 'src/style/index.scss'), '', done);
+				});
 			})
 			.on('end', done);
 	});
@@ -92,7 +98,7 @@ describe('mithril-webpack:route', function() {
 			'src/modules/testRoute/index.js',
 			'src/modules/testRoute/view.js',
 			'src/modules/testRoute/viewModel.js',
-			'src/modules/testRoute/styles.scss'
+			'src/modules/testRoute/style.scss'
 		]);
 	});
 });
