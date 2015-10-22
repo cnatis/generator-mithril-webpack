@@ -43,7 +43,8 @@ module.exports = yeoman.generators.Base.extend({
 		prompts.push({
 			type: 'confirm',
 			name: 'useBootstrap',
-			message: 'Would you like to use Bootstrap in your project?'
+			message: 'Would you like to use Bootstrap in your project?',
+			default: false
 		});
 
 		// Prompt user for jQuery inclusion
@@ -51,6 +52,7 @@ module.exports = yeoman.generators.Base.extend({
 			type: 'confirm',
 			name: 'useJQuery',
 			message: 'Would you like to use jQuery in your project?',
+			default: false,
 			when: function(answers) {
 				// Check if we are including Bootstrap
 				// Since Bootstrap requires jQuery we don't need to
@@ -63,7 +65,8 @@ module.exports = yeoman.generators.Base.extend({
 		prompts.push({
 			type: 'confirm',
 			name: 'useGit',
-			message: 'Would you like us to setup a Git repo for you?'
+			message: 'Would you like us to setup a Git repo for you?',
+			default: false
 		});
 
 		this.prompt(prompts, function(answer) {

@@ -8,7 +8,12 @@ var fs = require('fs-extra');
 
 describe('mithril-webpack:app', function() {
 	before(function(done) {
-		helpers.run(path.join(__dirname, '../generators/app'))
+		helpers.run(path.join(__dirname, '../generators-cov/app'))
+			.withPrompts({
+				'useBootstrap': false,
+				'useJQuery': false,
+				'useGit': false
+			})
 			.withOptions({
 				skipInstall: true
 			})
@@ -36,7 +41,7 @@ describe('mithril-webpack:app', function() {
 
 describe('mithril-webpack:component', function() {
 	before(function(done) {
-		helpers.run(path.join(__dirname, '../generators/component'))
+		helpers.run(path.join(__dirname, '../generators-cov/component'))
 			.withOptions({
 				skipInstall: true
 			})
@@ -61,7 +66,7 @@ describe('mithril-webpack:component', function() {
 
 describe('mithril-webpack:model', function() {
 	before(function(done) {
-		helpers.run(path.join(__dirname, '../generators/model'))
+		helpers.run(path.join(__dirname, '../generators-cov/model'))
 			.withOptions({
 				skipInstall: true
 			})
@@ -78,7 +83,7 @@ describe('mithril-webpack:model', function() {
 
 describe('mithril-webpack:route', function() {
 	before(function(done) {
-		helpers.run(path.join(__dirname, '../generators/route'))
+		helpers.run(path.join(__dirname, '../generators-cov/route'))
 			.withOptions({
 				skipInstall: true
 			})

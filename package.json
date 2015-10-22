@@ -11,7 +11,8 @@
     "url": "https://github.com/cnatis"
   },
   "scripts": {
-    "test": "mocha"
+    "jscoverage": "jscoverage generators generators-cov --exclude templates",
+    "test": "npm run jscoverage && mocha"
   },
   "files": [
     "generators"
@@ -31,6 +32,12 @@
     "fs-extra": "^0.24.0"
   },
   "devDependencies": {
-    "mocha": "*"
-  }
+    "coveralls": "^2.11.4",
+    "mocha": "*",
+    "mocha-lcov-reporter": "^1.0.0",
+    "pre-commit": "^1.1.2"
+  },
+  "pre-commit": [
+    "test"
+  ]
 }
