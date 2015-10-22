@@ -2,6 +2,8 @@
 
 > [Yeoman](http://yeoman.io) generator
 
+## Current Version Information V0.0.1
+This project is still in its infancy and is only suggested for playing with the technology until a stable version is released.
 
 ## Getting Started
 
