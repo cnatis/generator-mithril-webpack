@@ -3,7 +3,10 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-	entry: './src/index.js',
+	entry: [
+		/*===== yeoman entry hook =====*/
+		'./src/index.js'
+	],
 	output: {
 		path: path.join(__dirname, 'build'),
 		filename: 'bundle.js'
@@ -17,6 +20,10 @@ module.exports = {
 		),
 		new ExtractTextPlugin('styles.css', {
             allChunks: true
+        }),
+        new webpack.ProvidePlugin({
+        	/*===== yeoman provide plugin hook =====*/
+        	m: 'mithril'
         })
 	],
 	module: {
@@ -25,18 +32,25 @@ module.exports = {
 			{
 				test: /\.js$/,
 				loader: 'babel-loader',
-				exclude: /node_modules/
+				exclude: /(node_modules|bower_components)/
 			},
-			// SASS compiler
+			/*===== yeoman sass hook start =====*/
+			// SASS Compiler
 			{
 				test: /\.scss$/,
 				loader: ExtractTextPlugin.extract('css!sass')
 			},
+			/*===== yeoman sass hook end =====*/
 			// Static files
 			{
 				test: /\.html$/,
 				loader: 'static-loader'
-			}
+			},
+			{ test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,   loader: "url?limit=10000&mimetype=application/font-woff" },
+			{ test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,  loader: "url?limit=10000&mimetype=application/font-woff" },
+			{ test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: "url?limit=10000&mimetype=application/octet-stream" },
+			{ test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: "file" },
+			{ test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: "url?limit=10000&mimetype=image/svg+xml" }
 		]
 	}
 }

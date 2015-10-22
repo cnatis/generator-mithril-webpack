@@ -1,4 +1,5 @@
 require('./index.html?output=index.html');
+/*===== yeoman style require hook =====*/
 
 import m from 'mithril';
 

@@ -25,6 +25,7 @@ describe('mithril-webpack:app', function() {
 			'src',
 			'src/index.html',
 			'src/index.js',
+			'src/style/index.scss',
 			'src/components/README.md',
 			'src/images/README.md',
 			'src/models/README.md',

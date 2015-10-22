@@ -43,6 +43,17 @@ module.exports = yeoman.generators.Base.extend({
 				this.templatePath('component/**/*'),
 				this.destinationPath('src/components/' + this.componentName)
 			);
+
+			// Insert our style import into the project
+			var styleHook = '/*===== yeoman component hook =====*/';
+		
+			// Get out insert code ready to be inserted into the project
+			var styleSource = this.fs.read(this.destinationPath('src/style/index.scss'));
+			var styleInsert = "@import '../components/" + this.componentName + "/style.scss';"
+
+			// Write out the new contents to the file system
+			if(styleSource.indexOf(styleInsert) < 0)
+				this.fs.write(this.destinationPath('src/style/index.scss'), styleSource.replace(styleHook, styleHook + '\n' + styleInsert));
 		}
 	}
 });

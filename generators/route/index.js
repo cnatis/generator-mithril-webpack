@@ -73,6 +73,17 @@ module.exports = yeoman.generators.Base.extend({
 			// Write out the new contents to the file system
 			if(source.indexOf(insert) < 0)
 				this.fs.write(this.destinationPath('src/index.js'), source.replace(hook, insert + '\n\t' + hook));
+
+			// Insert our style import into the project
+			var styleHook = '/*===== yeoman module hook =====*/';
+		
+			// Get out insert code ready to be inserted into the project
+			var styleSource = this.fs.read(this.destinationPath('src/style/index.scss'));
+			var styleInsert = "@import '../modules/" + ccRoutePath + "/style.scss';"
+
+			// Write out the new contents to the file system
+			if(styleSource.indexOf(insert) < 0)
+				this.fs.write(this.destinationPath('src/style/index.scss'), styleSource.replace(styleHook, styleHook + '\n' + styleInsert));
 		}
 	}
 });
