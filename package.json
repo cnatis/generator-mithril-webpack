@@ -12,7 +12,7 @@
   },
   "scripts": {
     "jscoverage": "jscoverage generators generators-cov --exclude templates",
-    "test": "npm run jscoverage && mocha"
+    "test": "mocha"
   },
   "files": [
     "generators"
@@ -38,6 +38,7 @@
     "pre-commit": "^1.1.2"
   },
   "pre-commit": [
+    "jscoverage",
     "test"
   ]
 }
