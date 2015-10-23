@@ -7,6 +7,6 @@ node_js:
 after_success:
 - ./node_modules/.bin/jscoverage generators generators-cov --exclude templates
 - ./node_modules/.bin/mocha ./test/test-app.js -R mocha-lcov-reporter > coverage_temp.lcov
-- sed 's,SF:,SF:generator-mithril-webpack/' coverage_temp.lcov > coverage.lcov
+- sed 's,SF:,SF:generator-mithril-webpack/,' coverage_temp.lcov > coverage.lcov
 - cat coverage.lcov
 - cat coverage.lcov | ./node_modules/coveralls/bin/coveralls.js
