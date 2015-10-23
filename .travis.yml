@@ -5,4 +5,5 @@ node_js:
   - '0.12'
   - '0.10'
 after_success:
-- ./node_modules/.bin/mocha ./test/test-app.js -R mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
+- ./node_modules/.bin/mocha ./test/test-app.js -R mocha-lcov-reporter > coverage_temp.lcov
+- cat coverage_temp.lcov | %{$_ -replace "25h",""} | ./node_modules/coveralls/bin/coveralls.js
