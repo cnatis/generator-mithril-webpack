@@ -31,11 +31,11 @@ module.exports = {
 			// ES6 transpiler
 			{
 				test: /\.js$/,
-				loader: 'babel-loader',
+				loader: 'babel',
 				exclude: /(node_modules|bower_components)/
 			},
 			/*===== yeoman sass hook start =====*/
-			// SASS Compiler
+			// SASS compiler
 			{
 				test: /\.scss$/,
 				loader: ExtractTextPlugin.extract('css!sass')
@@ -44,8 +44,14 @@ module.exports = {
 			// Static files
 			{
 				test: /\.html$/,
-				loader: 'static-loader'
+				loader: 'static'
 			},
+			// Image files
+			{
+				test: /\.(png|jpg|gif)$/,
+				loader: 'url?limit=8192'
+			},
+			// Font files
 			{ test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,   loader: "url?limit=10000&mimetype=application/font-woff" },
 			{ test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,  loader: "url?limit=10000&mimetype=application/font-woff" },
 			{ test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: "url?limit=10000&mimetype=application/octet-stream" },
