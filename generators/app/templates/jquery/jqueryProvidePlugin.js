@@ -1,3 +1,3 @@
 $: 'jquery',
-jQuery: 'jquery',
-jquery: 'jquery',
+		jQuery: 'jquery',
+		jquery: 'jquery',

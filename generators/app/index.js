@@ -141,7 +141,7 @@ module.exports = yeoman.generators.Base.extend({
 
 				// Write out the new contents to the file system
 				if(source.indexOf(insert) < 0)
-					this.fs.write(this.destinationPath('webpack.config.js'), source.replace(entryHook, insert + '\n\t' + entryHook));
+					this.fs.write(this.destinationPath('webpack.config.js'), source.replace(entryHook, insert + '\n\t\t' + entryHook));
 
 				// Change the loaders to work with bootstrap
 				// Get our insert code ready to be inserted into the project
@@ -178,7 +178,7 @@ module.exports = yeoman.generators.Base.extend({
 
 				// Write out the new contents to the file system
 				if(source.indexOf(insert) < 0)
-					this.fs.write(this.destinationPath('webpack.config.js'), source.replace(styleRequireHook, insert));
+					this.fs.write(this.destinationPath('src/index.js'), source.replace(styleRequireHook, insert));
 			}
 		},
 		jQuery: function() {
@@ -192,7 +192,7 @@ module.exports = yeoman.generators.Base.extend({
 
 				// Write out the new contents to the file system
 				if(source.indexOf(insert) < 0)
-					this.fs.write(this.destinationPath('webpack.config.js'), source.replace(providePluginHook, insert + '\n\t' + providePluginHook));
+					this.fs.write(this.destinationPath('webpack.config.js'), source.replace(providePluginHook, insert + '\n\t\t\t' + providePluginHook));
 			}
 		}
 	},
