@@ -25,6 +25,7 @@ describe('mithril-webpack:app', function() {
 			'bower.json',
 			'package.json',
 			'webpack.config.js',
+			'webpack.production.config.js',
 			'.gitignore',
 			'.jshintrc',
 			'src',

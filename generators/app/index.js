@@ -2,6 +2,7 @@
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
+var util = require('../../utilities/util');
 
 module.exports = yeoman.generators.Base.extend({
 	constructor: function() {
@@ -100,6 +101,11 @@ module.exports = yeoman.generators.Base.extend({
 				this.templatePath('_webpack.config.js'),
 				this.destinationPath('webpack.config.js')
 			);
+			// Copy the webpack production config file
+			this.fs.copy(
+				this.templatePath('_webpack.production.config.js'),
+				this.destinationPath('webpack.production.config.js')
+			);
 			// Copy the gitkeep files
 			this.fs.copy(
 				this.templatePath('src/**/.gitkeep'),
@@ -129,28 +135,27 @@ module.exports = yeoman.generators.Base.extend({
 		},
 		bootstrap: function() {
 			if(this.promptResults.useBootstrap) {
-				// Update the webpack config file
-				// Hook is the comment we use to find out insert point
-				var entryHook = '/*===== yeoman entry hook =====*/';
-				var loaderHook = /\/\*===== yeoman sass hook start =====\*\/[[:ascii:]]*\/\*===== yeoman sass hook end =====\*\//;
+				function updateWebpackConfig(isProduction) {
+					// Update the webpack config file
+					// Hook is the comment we use to find out insert point
+					var entryHook = '/*===== yeoman entry hook =====*/';
+					var loaderHook = /\/\*===== yeoman sass hook start =====\*\/[[:ascii:]]*\/\*===== yeoman sass hook end =====\*\//;
+					var webpackFileName = (isProduction ? 'webpack.production.config.js' : 'webpack.config.js');
+					
+					// Add a new webpack entry
+					var source = this.destinationPath(webpackFileName);
+					var insert = this.templatePath('bootstrap/bootstrapEntry.js');
+					util.insertFileHook.call(this, entryHook, source, insert, '\n\t\t');
 
-				// Add a new webpack entry
-				// Get our insert code ready to be inserted into the project
-				var source = this.fs.read(this.destinationPath('webpack.config.js'));
-				var insert = this.fs.read(this.templatePath('bootstrap/bootstrapEntry.js'));
+					// Change the loaders to work with bootstrap
+					var insert = this.templatePath('bootstrap/bootstrapLoader.js');
+					util.replaceFileHook.call(this, loaderHook, source, insert);
+				}
 
-				// Write out the new contents to the file system
-				if(source.indexOf(insert) < 0)
-					this.fs.write(this.destinationPath('webpack.config.js'), source.replace(entryHook, insert + '\n\t\t' + entryHook));
-
-				// Change the loaders to work with bootstrap
-				// Get our insert code ready to be inserted into the project
-				var source = this.fs.read(this.destinationPath('webpack.config.js'));
-				var insert = this.fs.read(this.templatePath('bootstrap/bootstrapLoader.js'));
-
-				// Write out the new contents to the file system
-				if(source.indexOf(insert) < 0)
-					this.fs.write(this.destinationPath('webpack.config.js'), source.replace(loaderHook, insert));
+				// Update dev config
+				updateWebpackConfig.call(this, false);
+				// Update production config
+				updateWebpackConfig.call(this, true);
 
 				// Copy the bootstrap config files to the project
 				this.fs.copy(
@@ -172,6 +177,7 @@ module.exports = yeoman.generators.Base.extend({
 			} else {
 				// If we arent using boot strap we need to make the entry point require our style sheet
 				var styleRequireHook = '/*===== yeoman style require hook =====*/';
+
 				// Get our insert code ready to be inserted into the project
 				var source = this.fs.read(this.destinationPath('src/index.js'));
 				var insert = "require('./style/index.scss');"
@@ -187,12 +193,12 @@ module.exports = yeoman.generators.Base.extend({
 				var providePluginHook = '/*===== yeoman provide plugin hook =====*/';
 
 				// Get our insert code ready to be inserted into the project
-				var source = this.fs.read(this.destinationPath('webpack.config.js'));
-				var insert = this.fs.read(this.templatePath('jquery/jqueryProvidePlugin.js'));
+				var source = this.destinationPath('webpack.config.js');
+				var insert = this.templatePath('jquery/jqueryProvidePlugin.js');
+				util.insertFileHook.call(this, providePluginHook, source, insert, '\n\t\t\t');
 
-				// Write out the new contents to the file system
-				if(source.indexOf(insert) < 0)
-					this.fs.write(this.destinationPath('webpack.config.js'), source.replace(providePluginHook, insert + '\n\t\t\t' + providePluginHook));
+				source = this.destinationPath('webpack.production.config.js');
+				util.insertFileHook.call(this, providePluginHook, source, insert, '\n\t\t\t');
 			}
 		}
 	},
