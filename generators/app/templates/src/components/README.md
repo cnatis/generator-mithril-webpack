@@ -103,6 +103,7 @@ In addition, components can be reused in different contexts. Notice that the `Co
 This architecture can yield highly flexible and reusable code, but flexibility can also increase the cognitive load of the system (for example, you need to look at both the top-level module and `ContactList` in order to know what is the data being displayed (and how it's being filtered, etc). In addition, having a deeply nested tree of components can result in a lot of intermediate "pass-through" arguments and event handlers.
 
 [Further reading on components and application architecture](https://lhorie.github.io/mithril/components.html)
+
 [m.component API](https://lhorie.github.io/mithril/mithril.component.html)
 
 Credits to [Leo Horie](https://github.com/lhorie) as much of this content comes from the Mithril website.
