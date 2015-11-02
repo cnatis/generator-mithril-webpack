@@ -104,3 +104,5 @@ This architecture can yield highly flexible and reusable code, but flexibility c
 
 [Further reading on components and application architecture](https://lhorie.github.io/mithril/components.html)
 [m.component API](https://lhorie.github.io/mithril/mithril.component.html)
+
+Credits to [Leo Horie](https://github.com/lhorie) as much of this content comes from the Mithril website.
