@@ -5,7 +5,9 @@
 ## Current Version Information V0.0.3
 This project is still in its infancy and is only suggested for playing with the technology until a stable version is released. Feel free to contribute your ideas, and feedback on our Google group.
 
-[Mithril Webpack Generator Google Group](https://groups.google.com/forum/#!forum/yeoman-mithril-webpack-generator)
+[Mithril WebPack Generator Google Group](https://groups.google.com/forum/#!forum/yeoman-mithril-webpack-generator)
+
+Want to learn more than what is here? Go visit the [Mithril WebPack Generator Wiki](https://github.com/cnatis/generator-mithril-webpack/wiki)
 
 ## Getting Started
 
