@@ -1,6 +1,6 @@
 # [Application architecture with components](https://lhorie.github.io/mithril/components.html#application-architecture-with-components)
 
-Components are versatile tools to organize code and can be used in a variety of ways.
+Components are versatile tools to organize code and can be used in a variety of ways. Components are the encapsulated UI of your web application.
 
 ## [Parameterized components](https://lhorie.github.io/mithril/mithril.component.html#parameterized-components)
 
