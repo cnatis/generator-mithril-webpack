@@ -3,6 +3,7 @@ var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
 var _ = require('lodash');
+var util = require('../../utilities/util');
 
 module.exports = yeoman.generators.Base.extend({
 	constructor: function() {
@@ -20,7 +21,8 @@ module.exports = yeoman.generators.Base.extend({
 		this.option('default', {
 			desc: 'Set this route as the "default" route at url "/"',
 			alias: 'd',
-			type: Boolean
+			type: Boolean,
+			defaults: false
 		});
 	},
 	prompting: function() {
@@ -66,24 +68,22 @@ module.exports = yeoman.generators.Base.extend({
 			);
 
 			// Get out insert code ready to be inserted into the project
-			var source = this.fs.read(this.destinationPath('src/index.js'));
+			var source = this.destinationPath('src/index.js');
 			var insert = this.fs.read(this.templatePath('routeInsert.js'));
 			insert = insert.replace(/###newRouteURL###/g, finalRoute).replace(/###newRoutePath###/g, './modules/' + ccRoutePath);
 
 			// Write out the new contents to the file system
-			if(source.indexOf(insert) < 0)
-				this.fs.write(this.destinationPath('src/index.js'), source.replace(hook, insert + '\n\t' + hook));
+			util.insertStringHook.call(this, hook, source, insert, '\n\t');
 
 			// Insert our style import into the project
 			var styleHook = '/*===== yeoman module hook =====*/';
 		
 			// Get out insert code ready to be inserted into the project
-			var styleSource = this.fs.read(this.destinationPath('src/style/index.scss'));
+			var styleSource = this.destinationPath('src/style/index.scss');
 			var styleInsert = "@import '../modules/" + ccRoutePath + "/style.scss';"
 
 			// Write out the new contents to the file system
-			if(styleSource.indexOf(insert) < 0)
-				this.fs.write(this.destinationPath('src/style/index.scss'), styleSource.replace(styleHook, styleHook + '\n' + styleInsert));
+			util.insertStringHook.call(this, styleHook, styleSource, styleInsert, '\n');
 		}
 	}
 });
