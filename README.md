@@ -57,6 +57,15 @@ WebPack allows us to automatically split our code into bundles for increased ini
 
 This generator includes code that will start to load your additional modules after the first module render, this means the end user only needs to wait to load the first module, additional modules are loaded while the user is browsing the first module.
 
+#### ES6/ES2015
+This generator utilizes the new ES6/ES2015 version of JavaScript. The code generated relies heavily on the use of these new features and as such it is important to understand some key concepts.
+
+##### ES6/ES2015 Modules
+The new module and import syntax allows developers to avoid unnecessary namespacing and allows for better code reuse and structure. Please read about the [ES6/ES2015 module syntax](http://www.2ality.com/2014/09/es6-modules-final.html) to familiarize yourself with these concepts.
+
+##### ES6/ES2015 Classes
+The new class syntax adds syntactic sugar to JavaScripts prototype pattern. This allows the creation of classes and objects from these classes in a clean and easier to understand way. Please read about the [ES6/ES2015 class syntax](http://www.2ality.com/2015/02/es6-classes-final.html) to familiarize yourself with these concepts.
+
 #### SASS
 
 This generator comes packed with a SASS pre-processor. SASS brings many powerful features to CSS which you can read about [on the SASS website](http://sass-lang.com/guide)
