@@ -1,3 +1,4 @@
 export default function(ctrl) {
-	return '';
+	let vm = ctrl.vm;
+	return m('.new-component', 'Hello World!');
 }
