@@ -62,7 +62,7 @@ module.exports = {
 		var source = this.fs.read(targetPath);
 
 		// Write out the new contents to the file system
-		if(source.indexOf(insert) < 0)
+		if(source.indexOf(insertString) < 0)
 			this.fs.write(targetPath, source.replace(hook, insertString));
 	}
 }
