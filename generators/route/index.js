@@ -1,6 +1,7 @@
 'use strict';
 var yeoman = require('yeoman-generator');
 var _ = require('lodash');
+var astQuery = require('ast-query');
 var util = require('../../utilities/util');
 
 module.exports = yeoman.generators.Base.extend({
@@ -64,12 +65,163 @@ module.exports = yeoman.generators.Base.extend({
 			);
 
 			// Get out insert code ready to be inserted into the project
-			var source = this.destinationPath('src/index.js');
-			var insert = this.fs.read(this.templatePath('routeInsert.js'));
-			insert = insert.replace(/###newRouteURL###/g, finalRoute).replace(/###newRoutePath###/g, './modules/' + ccRoutePath);
-
-			// Write out the new contents to the file system
-			util.insertStringHook.call(this, hook, source, insert, '\n\t');
+			var sourcePath = this.destinationPath('src/index.js');
+			// Tree is an instance of ast-query
+			var tree = astQuery(this.fs.read(sourcePath));
+			var routes = tree.var('routes');
+			routes.nodes[0].init.properties.push({
+                type: 'Property',
+                key: {
+                    type: 'Literal',
+                    value: finalRoute
+                },
+               	value: {
+                    type: 'ObjectExpression',
+                    properties: [
+                        {
+                            type: 'Property',
+                            key: {
+                                'type': 'Identifier',
+                                'name': 'controller'
+                            },
+                            value: {
+                                type: 'FunctionExpression',
+                                id: null,
+                                params: [],
+                                defaults: [],
+                                body: {
+                                    type: 'BlockStatement',
+                                    body: [
+                                        {
+                                            type: 'ExpressionStatement',
+                                            expression: {
+                                                type: 'CallExpression',
+                                                callee: {
+                                                    type: 'MemberExpression',
+                                                    object: {
+                                                        type: 'Identifier',
+                                                        name: 'require'
+                                                    },
+                                                    'property': {
+                                                        'type': 'Identifier',
+                                                        'name': 'ensure'
+                                                    }
+                                                },
+                                                arguments: [
+                                                    {
+                                                        type: 'ArrayExpression',
+                                                        elements: []
+                                                    },
+                                                    {
+                                                        type: 'ArrowFunctionExpression',
+                                                        id: null,
+                                                        params: [],
+                                                        defaults: [],
+                                                        body: {
+                                                            type: 'BlockStatement',
+                                                            body: [
+                                                                {
+                                                                    type: 'ExpressionStatement',
+                                                                    expression: {
+                                                                        type: 'AssignmentExpression',
+                                                                        operator: '=',
+                                                                        left: {
+                                                                            type: 'MemberExpression',
+                                                                            computed: true,
+                                                                            object: {
+                                                                                type: 'Identifier',
+                                                                                name: 'routes'
+                                                                            },
+                                                                            property: {
+                                                                                type: 'Literal',
+                                                                                value: finalRoute
+                                                                            }
+                                                                        },
+                                                                        right: {
+                                                                            type: 'CallExpression',
+                                                                            callee: {
+                                                                                type: 'Identifier',
+                                                                                name: 'require'
+                                                                            },
+                                                                            arguments: [
+                                                                                {
+                                                                                    type: 'Literal',
+                                                                                    value: './modules/' + ccRoutePath
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    type: 'ExpressionStatement',
+                                                                    expression: {
+                                                                        type: 'CallExpression',
+                                                                        callee: {
+                                                                            type: 'MemberExpression',
+                                                                            object: {
+                                                                                type: 'Identifier',
+                                                                                name: 'm'
+                                                                            },
+                                                                            property: {
+                                                                                type: 'Identifier',
+                                                                                name: 'route'
+                                                                            }
+                                                                        },
+                                                                        arguments: [
+                                                                            {
+                                                                                type: 'CallExpression',
+                                                                                callee: {
+                                                                                    type: 'MemberExpression',
+                                                                                    computed: false,
+                                                                                    object: {
+                                                                                        type: 'Identifier',
+                                                                                        name: 'm'
+                                                                                    },
+                                                                                    property: {
+                                                                                        type: 'Identifier',
+                                                                                        name: 'route'
+                                                                                    }
+                                                                                },
+                                                                                arguments: []
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                },
+                                                                {
+                                                                    type: 'ExpressionStatement',
+                                                                    expression: {
+                                                                        type: 'CallExpression',
+                                                                        callee: {
+                                                                            type: 'Identifier',
+                                                                            name: 'lazyLoad'
+                                                                        },
+                                                                        arguments: []
+                                                                    }
+                                                                }
+                                                            ]
+                                                        },
+                                                        generator: false,
+                                                        expression: false
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                generator: false,
+                                expression: false
+                            },
+                            kind: 'init',
+                            method: false,
+                            shorthand: false
+                        }
+                    ]
+                },
+                kind: 'init',
+                method: false,
+                shorthand: false
+            });
+			this.fs.write(sourcePath, tree.toString());
 
 			// Insert our style import into the project
 			var styleHook = '/*===== yeoman module hook =====*/';
