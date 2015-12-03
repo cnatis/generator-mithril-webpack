@@ -2,7 +2,7 @@
 
 > [Yeoman](http://yeoman.io) generator
 
-## Current Version Information V0.0.5
+## Current Version Information V0.0.6
 This project is still in its infancy and is only suggested for playing with the technology until a stable version is released. Feel free to contribute your ideas, and feedback on our Google group.
 
 [Mithril WebPack Generator Google Group](https://groups.google.com/forum/#!forum/yeoman-mithril-webpack-generator)
