@@ -1,12 +1,10 @@
 require('./index.html?output=index.html');
 /*===== yeoman style require hook =====*/
 
-import m from 'mithril';
-
 function lazyLoad() {
-	let onload = window.onload || function() {};
+	var onload = window.onload || function() {};
 	window.onload = function() {
-		let currentRoute = m.route();
+		var currentRoute = m.route();
 		Object.keys(routes).forEach(function(key) {
 			var route = routes[key];
 			if(key !== currentRoute)
@@ -16,7 +14,7 @@ function lazyLoad() {
 	}
 }
 
-let routes = {
+var routes = {
 	/*===== yeoman hook =====*/
 };
 

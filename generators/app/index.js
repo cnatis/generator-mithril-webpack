@@ -1,6 +1,6 @@
 'use strict';
 var yeoman = require('yeoman-generator');
-var util = require('../../utilities/util');
+var astQuery = require('ast-query');
 
 module.exports = yeoman.generators.Base.extend({
 	constructor: function() {
@@ -130,24 +130,64 @@ module.exports = yeoman.generators.Base.extend({
 			);
 		},
 		bootstrap: function() {
+			function updateWebpackConfig(isProduction) {
+				// Update the webpack config file
+				var webpackFileName = (isProduction ? 'webpack.production.config.js' : 'webpack.config.js');
+				var sourcePath = this.destinationPath(webpackFileName);
+				// Tree is an instance of ast-query
+				var tree = astQuery(this.fs.read(sourcePath));
+				// Module exports is an assignment node
+				var moduleExports = tree.assignment('module.exports').value();
+				// Plugins is an array expression node
+				var entry = moduleExports.key('entry');
+				var loaders = moduleExports.key('module').key('loaders');
+				entry.push("'bootstrap-sass!./bootstrap-sass.config.js'");
+				// Remove the extract text plugin
+				loaders.nodes[0].elements = loaders.nodes[0].elements.filter(function(item) {
+					return item.properties.reduce(function(result, prop) {
+						if(prop.key.name === 'loader' && 
+							prop.value.type === 'CallExpression' &&
+							prop.value.callee.object.name === 'ExtractTextPlugin') {
+							return false;	
+						}
+						return result;
+					}, true);
+				});
+				loaders.nodes[0].elements.push({
+                    type: 'ObjectExpression',
+                    properties: [
+                        {
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'test'
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: /bootstrap-sass\/assets\/javascripts\//,
+                                regex: {
+                                    pattern: /bootstrap-sass\/assets\/javascripts\//,
+                                    flags: ''
+                                }
+                            }
+                        },
+                        {
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'loader'
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: 'imports?jQuery=jquery'
+                            }
+                        }
+                    ]
+                });
+				this.fs.write(sourcePath, tree.toString());
+			}
+			
 			if(this.promptResults.useBootstrap) {
-				function updateWebpackConfig(isProduction) {
-					// Update the webpack config file
-					// Hook is the comment we use to find out insert point
-					var entryHook = '/*===== yeoman entry hook =====*/';
-					var loaderHook = /\/\*===== yeoman sass hook start =====\*\/[[:ascii:]]*\/\*===== yeoman sass hook end =====\*\//;
-					var webpackFileName = (isProduction ? 'webpack.production.config.js' : 'webpack.config.js');
-					
-					// Add a new webpack entry
-					var source = this.destinationPath(webpackFileName);
-					var insert = this.templatePath('bootstrap/bootstrapEntry.js');
-					util.insertFileHook.call(this, entryHook, source, insert, '\n\t\t');
-
-					// Change the loaders to work with bootstrap
-					var insert = this.templatePath('bootstrap/bootstrapLoader.js');
-					util.replaceFileHook.call(this, loaderHook, source, insert);
-				}
-
 				// Update dev config
 				updateWebpackConfig.call(this, false);
 				// Update production config
@@ -171,30 +211,68 @@ module.exports = yeoman.generators.Base.extend({
 					this.destinationPath('src/style/_pre-bootstrap-customizations.scss')
 				);
 			} else {
-				// If we arent using boot strap we need to make the entry point require our style sheet
-				var styleRequireHook = '/*===== yeoman style require hook =====*/';
-
 				// Get our insert code ready to be inserted into the project
-				var source = this.fs.read(this.destinationPath('src/index.js'));
-				var insert = "require('./style/index.scss');"
-
+				var sourcePath = this.destinationPath('src/index.js');
+				// Tree is an instance of ast-query
+				var tree = astQuery(this.fs.read(sourcePath));
+				tree.body.prepend("require('./style/index.scss');");
+				
 				// Write out the new contents to the file system
-				if(source.indexOf(insert) < 0)
-					this.fs.write(this.destinationPath('src/index.js'), source.replace(styleRequireHook, insert));
+				this.fs.write(sourcePath, tree.toString());
 			}
 		},
 		jQuery: function() {
-			if(this.promptResults.useBootstrap) {
-				// Hook is the comment we use to find out insert point
-				var providePluginHook = '/*===== yeoman provide plugin hook =====*/';
-
-				// Get our insert code ready to be inserted into the project
-				var source = this.destinationPath('webpack.config.js');
-				var insert = this.templatePath('jquery/jqueryProvidePlugin.js');
-				util.insertFileHook.call(this, providePluginHook, source, insert, '\n\t\t\t');
-
-				source = this.destinationPath('webpack.production.config.js');
-				util.insertFileHook.call(this, providePluginHook, source, insert, '\n\t\t\t');
+			if(this.promptResults.useBootstrap || this.promptResults.useJQuery) {
+				var sourcePath = this.destinationPath('webpack.config.js');
+				// Tree is an instance of ast-query
+				var tree = astQuery(this.fs.read(sourcePath));
+				// Module exports is an assignment node
+				var moduleExports = tree.assignment('module.exports').value();
+				// Plugins is an array expression node
+				var plugins = moduleExports.key('plugins');
+				var providePlugin = plugins.nodes[0].elements.reduce(function(result, current) {
+					if(current.callee.property && current.callee.property.name === 'ProvidePlugin') {
+						return current;
+					}
+					return result;
+				});
+				if(providePlugin) {
+		 			var pluginArguments = providePlugin.arguments[0].properties;
+		 			pluginArguments.push({
+		 				type: 'Property',
+		 				key: {
+		 					type: 'Identifier',
+		 					name: '$'
+		 				},
+		 				value: {
+		 					type: 'Literal',
+		 					value: 'jquery'
+		 				}
+		 			});
+		 			pluginArguments.push({
+		 				type: 'Property',
+		 				key: {
+		 					type: 'Identifier',
+		 					name: 'jQuery'
+		 				},
+		 				value: {
+		 					type: 'Literal',
+		 					value: 'jquery'
+		 				}
+		 			});
+		 			pluginArguments.push({
+		 				type: 'Property',
+		 				key: {
+		 					type: 'Identifier',
+		 					name: 'jquery'
+		 				},
+		 				value: {
+		 					type: 'Literal',
+		 					value: 'jquery'
+		 				}
+		 			});
+				}
+				this.fs.write(sourcePath, tree.toString());
 			}
 		}
 	},
