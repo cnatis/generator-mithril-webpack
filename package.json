@@ -26,10 +26,8 @@
     "webpack"
   ],
   "dependencies": {
-    "chalk": "^1.0.0",
     "lodash": "^3.10.1",
     "yeoman-generator": "^0.19.0",
-    "yosay": "^1.0.2",
     "fs-extra": "^0.24.0"
   },
   "devDependencies": {

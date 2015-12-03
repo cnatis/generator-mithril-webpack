@@ -1,7 +1,5 @@
 'use strict';
 var yeoman = require('yeoman-generator');
-var chalk = require('chalk');
-var yosay = require('yosay');
 var util = require('../../utilities/util');
 
 module.exports = yeoman.generators.Base.extend({
@@ -12,9 +10,7 @@ module.exports = yeoman.generators.Base.extend({
 		var done = this.async();
 
 		// Have Yeoman greet the user.
-		this.log(yosay(
-			'Welcome to the awe-inspiring ' + chalk.red('Mithril') + ' generator!'
-		));
+		this.log('Welcome to the awe-inspiring Mithril generator!');
 
 		// Let the user know this generator will create a new directory
 		this.log('INFO: This generator will create a new directory for your project with the provided project name.');
