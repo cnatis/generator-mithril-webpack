@@ -86,13 +86,19 @@ describe('mithril-webpack:route', function() {
 	before(function(done) {
 		helpers.run(path.join(__dirname, '../generators-cov/route'))
 			.withOptions({
-				skipInstall: true
+				skipInstall: true,
+				// We are forcing here because the yeoman conflict
+				// resolver will throw errors if we don't force it
+				// to overwrite
+				force: true
 			})
 			.withArguments(['/testRoute'])
 			.inTmpDir(function (dir) {
-				var done = this.async();
-				fs.outputFile(path.join(dir, 'src/index.js'), '', function() {
-					fs.outputFile(path.join(dir, 'src/style/index.scss'), '', done);
+				var doneSetup = this.async();
+				fs.copy(path.join(__dirname, '../generators/app/templates/src/index.js'), path.join(dir, 'src/index.js'), function(err) {
+					fs.outputFile(path.join(dir, 'src/style/index.scss'), '', function(err) {
+						doneSetup();
+					});
 				});
 			})
 			.on('end', done);
