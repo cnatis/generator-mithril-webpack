@@ -104,6 +104,19 @@ componentName
 
 The name of the component will determine the folder name used to hold the components files.
 
+#### Layout Generator
+
+```bash
+yo mithril-webpack:layout <layoutName>
+```
+
+This generator will create a layout for you using the current directory as the project.
+
+##### Arguments:
+layoutName
+
+The name of the layout will determine the folder name used to hold the layouts files.
+
 #### Model Generator
 
 ```bash
