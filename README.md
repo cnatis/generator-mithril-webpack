@@ -57,6 +57,10 @@ WebPack allows us to automatically split our code into bundles for increased ini
 
 This generator includes code that will start to load your additional modules after the first module render, this means the end user only needs to wait to load the first module, additional modules are loaded while the user is browsing the first module.
 
+#### Long Term Cache Ready
+
+The production configuration included with this generator will add file hashes to the file names to allow for long term caching of static assets. The hashed filename comes with cache-busting capabilities, no longer will you need to tell your users to clear their cache!
+
 #### ES6/ES2015
 This generator utilizes the new ES6/ES2015 version of JavaScript. The code generated relies heavily on the use of these new features and as such it is important to understand some key concepts.
 

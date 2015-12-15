@@ -146,7 +146,7 @@ module.exports = yeoman.generators.Base.extend({
                                                                             arguments: [
                                                                                 {
                                                                                     type: 'Literal',
-                                                                                    value: './modules/' + ccRoutePath
+                                                                                    value: 'modules/' + ccRoutePath
                                                                                 }
                                                                             ]
                                                                         }

@@ -1,10 +1,10 @@
 var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
 	entry: [
-		/*===== yeoman entry hook =====*/
 		'./src/index.js'
 	],
 	output: {
@@ -12,7 +12,24 @@ module.exports = {
 		filename: 'bundle.js'
 	},
 	resolve: {
-		root: [path.join(__dirname, 'bower_components')]
+		root: [
+			// Add bower_components to the resolve path
+			path.join(__dirname, 'bower_components')
+		],
+		alias: {
+			// Alias for unminified mithril library
+			m: path.join(__dirname, 'node_modules/mithril/mithril'),
+			// Add alias for components folder
+			components: path.join(__dirname, 'src/components'),
+			// Add alias for images folder
+			images: path.join(__dirname, 'src/images'),
+			// Add alias for models folder
+			models: path.join(__dirname, 'src/models'),
+			// Add alias for modules folder
+			modules: path.join(__dirname, 'src/modules'),
+			// Add alias for layouts folder
+			layouts: path.join(__dirname, 'src/layouts')
+		}
 	},
 	plugins: [
 		new webpack.ResolverPlugin(
@@ -22,9 +39,14 @@ module.exports = {
             allChunks: true
         }),
         new webpack.ProvidePlugin({
-        	/*===== yeoman provide plugin hook =====*/
         	m: 'mithril'
-        })
+        }),
+        new webpack.optimize.OccurenceOrderPlugin(),
+        new HtmlWebpackPlugin({
+			filename: 'index.html',
+			template: path.join(__dirname, 'src', 'index.tpl'),
+			inject: 'body'
+		})
 	],
 	module: {
 		loaders: [
@@ -34,13 +56,11 @@ module.exports = {
 				loader: 'babel',
 				exclude: /(node_modules|bower_components)/
 			},
-			/*===== yeoman sass hook start =====*/
 			// SASS compiler
 			{
 				test: /\.scss$/,
 				loader: ExtractTextPlugin.extract('css!sass')
 			},
-			/*===== yeoman sass hook end =====*/
 			// Static files
 			{
 				test: /\.html$/,

@@ -1,4 +1,3 @@
-require('./index.html?output=index.html');
 /*===== yeoman style require hook =====*/
 
 function lazyLoad() {

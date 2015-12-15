@@ -6,14 +6,10 @@
         <title><%= projectName %> powered by the Mithril.js WebPack Generator</title>
         <meta name="description" content="<%= projectName %>">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <link rel="stylesheet" type="text/css" href="/styles.css" />
     </head>
     <body>
       <!--[if lt IE 8]>
           <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
       <![endif]-->
-
-      <script src="/bundle.js"></script>
     </body>
 </html>

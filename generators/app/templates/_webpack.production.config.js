@@ -1,38 +1,59 @@
 var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ManifestPlugin = require('webpack-manifest-plugin');
 
 module.exports = {
 	entry: [
-		/*===== yeoman entry hook =====*/
 		'./src/index.js'
 	],
 	output: {
 		path: path.join(__dirname, 'build'),
-		filename: 'bundle.js'
+		filename: '[name].[chunkhash].js',
+		chunkFilename: '[name].[chunkhash].js'
 	},
 	resolve: {
-		root: [path.join(__dirname, 'bower_components')]
+		root: [
+			// Add bower_components to the resolve path
+			path.join(__dirname, 'bower_components')
+		],
+		alias: {
+			// Alias for unminified mithril library
+			m: path.join(__dirname, 'node_modules/mithril/mithril'),
+			// Add alias for components folder
+			components: path.join(__dirname, 'src/components'),
+			// Add alias for images folder
+			images: path.join(__dirname, 'src/images'),
+			// Add alias for models folder
+			models: path.join(__dirname, 'src/models'),
+			// Add alias for modules folder
+			modules: path.join(__dirname, 'src/modules'),
+			// Add alias for layouts folder
+			layouts: path.join(__dirname, 'src/layouts')
+		}
 	},
 	plugins: [
+		new webpack.optimize.AggressiveMergingPlugin({
+			minSizeReduce: 1.5,
+			moveToParents: true,
+			entryChunkMultiplicator: 2
+		}),
 		new webpack.ResolverPlugin(
 			new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('bower.json', ['main'])
 		),
-		new ExtractTextPlugin('styles.css', {
+		new ExtractTextPlugin('[name].[contenthash].css', {
             allChunks: true
         }),
         new webpack.ProvidePlugin({
-        	/*===== yeoman provide plugin hook =====*/
         	m: 'mithril'
         }),
-        new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.OccurenceOrderPlugin(true),
-        new webpack.optimize.UglifyJsPlugin({
-        	sourceMap: true,
-		    mangle: true,
-		    compress: {
-		        warnings: false
-		    }
+		new webpack.optimize.OccurenceOrderPlugin(),
+		new ManifestPlugin(),
+		new HtmlWebpackPlugin({
+			filename: 'index.html',
+			template: path.join(__dirname, 'src', 'index.tpl'),
+			inject: 'body'
 		})
 	],
 	module: {
@@ -43,16 +64,14 @@ module.exports = {
 				loader: 'babel',
 				exclude: /(node_modules|bower_components)/
 			},
-			/*===== yeoman sass hook start =====*/
 			// SASS compiler
 			{
 				test: /\.scss$/,
 				loader: ExtractTextPlugin.extract('css!sass')
 			},
-			/*===== yeoman sass hook end =====*/
 			// Static files
 			{
-				test: /\.html$/,
+				test: /(\.html|txt)$/,
 				loader: 'static'
 			},
 			// Image files

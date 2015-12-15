@@ -124,8 +124,8 @@ module.exports = yeoman.generators.Base.extend({
 			);
 			// Copy index file and fill in our values
 			this.fs.copyTpl(
-				this.templatePath('src/index.html'),
-				this.destinationPath('src/index.html'),
+				this.templatePath('src/index.tpl'),
+				this.destinationPath('src/index.tpl'),
 				{ projectName: this.promptResults.projectName || 'Untitled' }
 			);
 		},
