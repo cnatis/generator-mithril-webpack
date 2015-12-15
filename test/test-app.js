@@ -29,7 +29,7 @@ describe('mithril-webpack:app', function() {
 			'.gitignore',
 			'.jshintrc',
 			'src',
-			'src/index.html',
+			'src/index.tpl',
 			'src/index.js',
 			'src/style/index.scss',
 			'src/components/README.md',
