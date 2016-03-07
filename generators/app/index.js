@@ -300,7 +300,9 @@ module.exports = yeoman.generators.Base.extend({
 		}
 
 		// Install dependencies
-		this.npmInstall(optionalDependencies);
+		this.npmInstall(optionalDependencies, {
+			save: true
+		});
 		this.installDependencies({
 			npm: true,
 			bower: false
